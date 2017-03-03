@@ -154,6 +154,7 @@ function initialNNFunction(filename,schType,scalingFactor,lrEpochThres,dropoutTy
         plotname = strcat('schType =  ', num2str(schType), ', scalingFactor =  ', num2str(scalingFactor), ', lrEpochThres =  ', num2str(lrEpochThres), ', weightPenaltyL2 =  ', num2str(weightPenaltyL2));
     else
         plotname = strcat('schType =  ', num2str(schType), ', scalingFactor =  ', num2str(scalingFactor), ', lrEpochThres =  ', num2str(lrEpochThres), ', dropoutType =  ', num2str(dropoutType));  
+    end
     title(plotname);
     xlabel('Number of Epochs');
     ylabel('Classification Error');
