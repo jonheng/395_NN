@@ -1,4 +1,4 @@
-function initialNNFunction(filename,schType,scalingFactor,lrEpochThres)
+function [clsfError] = initialNNFunction(filename,schType,scalingFactor,lrEpochThres)
     type = 2; % 2 for NN
 
     % Loading data
@@ -49,7 +49,7 @@ function initialNNFunction(filename,schType,scalingFactor,lrEpochThres)
     %initialise NN params
     nn = paramsNNinit(hiddenLayers,hiddenActivationFunctions);
     % number of epochs
-    nn.epochs = 100;
+    nn.epochs = 50;
 
     % learning rate parameters (lrParams)
     % initial learning rate
@@ -98,7 +98,7 @@ function initialNNFunction(filename,schType,scalingFactor,lrEpochThres)
     %nn.dropoutParams.dropoutPresentProbHid = 0.5
 
     % early stopping
-    nn.earlyStopping = 1;
+    nn.earlyStopping = 0;
     % maximum number of increases in validation error until training stops
     nn.max_fail = 10;
 
@@ -158,4 +158,6 @@ function initialNNFunction(filename,schType,scalingFactor,lrEpochThres)
     ylabel('Loss');
     saveas(f,filename{2})
     close all
+    
+    clsfError = clsfError_val(x_axis);
 end

@@ -1,7 +1,7 @@
 % Task 3: Using InitialLR of 0.1 as found from previous task
 filename = {'figures/clsfError3-#-#.png','figures/loss3-#-#.png'};
-scalingFactor_list = [0.999, 0.99, 0.9, 0.8];
-lrEpochThres_list = [5, 10, 50];
+scalingFactor_list = [0.95, 0.9, 0.85, 0.8, 0.75];
+lrEpochThres_list = [2, 4, 5, 6, 8, 10, 12];
 
 for idy = 1:length(lrEpochThres_list)
     lrEpochThres = lrEpochThres_list(idy);
