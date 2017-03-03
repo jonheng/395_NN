@@ -42,7 +42,7 @@ elseif nn.pretraining == 0 && nn.dropoutParams.dropoutType ~= 0
     
 
 %     e.g.
-    nn.trParams.lrParams.initialLR = 0.5; % this was originally 10
+    nn.trParams.lrParams.initialLR = 0.9; % this was originally 10
     nn.trParams.lrParams.scalingFactor = 0.998;
     nn.trParams.lrParams.schedulingType = 2;
     
