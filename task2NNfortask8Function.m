@@ -1,4 +1,4 @@
-function task2NNFunction(filename,initialLR)
+function [clsfError_train,clsfError_val,L_train,L_val,stats] = task2NNfortask8Function()
     type = 2; % 2 for NN
 
     % Loading data
@@ -53,7 +53,7 @@ function task2NNFunction(filename,initialLR)
 
     % learning rate parameters (lrParams)
     % initial learning rate
-    nn.trParams.lrParams.initialLR = initialLR;
+    nn.trParams.lrParams.initialLR = 0.1;
     % threshold of learning rate decay (after set epochs)
     nn.trParams.lrParams.lrEpochThres = 50;
     % set learning rate update policy
@@ -81,7 +81,7 @@ function task2NNFunction(filename,initialLR)
     % show diagnostics to monitor training
     % setting to 1 displays the mean/st. dev. of neuron activations &
     % the ratio norm(delta w)/norm(w) (should be 0.01 - 0.0001)
-    nn.diagnostics = 1;
+    nn.diagnostics = 0;
     % show diagnostic every 'x' epochs
     nn.showDiagnostics = 5;
 
@@ -140,21 +140,5 @@ function task2NNFunction(filename,initialLR)
         [stats, output, e, L] = evaluateNNperformance( nn, test_x, test_y);
     end
 
-    f = figure();
-    x_axis = find(clsfError_train);
-    plot(x_axis,clsfError_train(x_axis),x_axis,clsfError_val(x_axis));
-    plotname= strcat('initialLR=',num2str(initialLR));
-    title(plotname);
-    xlabel('Number of Epochs');
-    ylabel('Classification Error');
-    legend('Training error','Validation error');
-    saveas(f,filename{1})
-    plot(x_axis,L_train(x_axis),x_axis,L_val(x_axis));
-    title(plotname);
-    xlabel('Number of Epochs');
-    ylabel('Loss');
-    legend('Training loss','Validation loss');
-    saveas(f,filename{2})
-    close all
 end
 

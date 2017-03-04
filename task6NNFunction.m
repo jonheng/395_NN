@@ -1,4 +1,4 @@
-function task2NNFunction(filename,initialLR)
+function [clsfError] = task6NNFunction(filename,hiddenLayersShape,hiddenActivationFunctions)
     type = 2; % 2 for NN
 
     % Loading data
@@ -27,8 +27,8 @@ function task2NNFunction(filename,initialLR)
     elseif type == 2 % classifier
         % output size is based on target vector
         outputSize = size(train_y,2);
-        hiddenActivationFunctions = {'ReLu','ReLu','softmax'};
-        hiddenLayers = [500 500 outputSize];
+        %hiddenActivationFunctions = {'ReLu','ReLu','softmax'};
+        hiddenLayers = [hiddenLayersShape outputSize];
     end
 
     % parameters used for visualization of first layer weights
@@ -49,22 +49,24 @@ function task2NNFunction(filename,initialLR)
     %initialise NN params
     nn = paramsNNinit(hiddenLayers,hiddenActivationFunctions);
     % number of epochs
-    nn.epochs = 100;
+    nn.epochs = 250;
 
     % learning rate parameters (lrParams)
     % initial learning rate
-    nn.trParams.lrParams.initialLR = initialLR;
+    nn.trParams.lrParams.initialLR = 0.1;
     % threshold of learning rate decay (after set epochs)
-    nn.trParams.lrParams.lrEpochThres = 50;
+    nn.trParams.lrParams.lrEpochThres = 10;
     % set learning rate update policy
     nn.trParams.lrParams.schedulingType = 1;
+    % set scaling Factor
+    nn.trParams.lrParams.scalingFactor = 0.99;
 
     % momentum parameters (momParams)
     % linear increase (only 1 type supported currently)
     nn.trParams.momParams.schedulingType = 1;
     % set epoch threshold when momentum starts increasing
     % initial value is 0.5 (can be changed)
-    nn.trParams.momParams.momentumEpochLowerThres = 50;
+    nn.trParams.momParams.momentumEpochLowerThres = 10;
     % set epoch threshold when momentum reaches final value 
     % default final value is 0.9 (can be changed)
     nn.trParams.momParams.momentumEpochUpperThres = 100;
@@ -74,22 +76,22 @@ function task2NNFunction(filename,initialLR)
     % linear weight penalty
     nn.weightConstraints.weightPenaltyL1 = 0;
     % squared weight penalty
-    nn.weightConstraints.weightPenaltyL2 = 0;
+    nn.weightConstraints.weightPenaltyL2 = 0.001;
     % max norm constraint (constraint ||w|| <= c, where c is usually 3 or 4)
     nn.weightConstraints.maxNormConstraint = 0;
 
     % show diagnostics to monitor training
     % setting to 1 displays the mean/st. dev. of neuron activations &
     % the ratio norm(delta w)/norm(w) (should be 0.01 - 0.0001)
-    nn.diagnostics = 1;
+    nn.diagnostics = 0;
     % show diagnostic every 'x' epochs
-    nn.showDiagnostics = 5;
+    nn.showDiagnostics = 10;
 
     % show training and validation loss plot
     %nn.showPlot = 1;
 
     % 0 for no dropout, 1 for Bernoulli dropout 
-    nn.dropoutParams.dropoutType = 0;
+    nn.dropoutParams.dropoutType = 1;
     %Visible/input layer dropout rate (default=0.8)
     %nn.dropoutParams.dropoutPresentProbVis = 0.8
     %Hidden layer dropout rate (default=0.5)
@@ -143,18 +145,19 @@ function task2NNFunction(filename,initialLR)
     f = figure();
     x_axis = find(clsfError_train);
     plot(x_axis,clsfError_train(x_axis),x_axis,clsfError_val(x_axis));
-    plotname= strcat('initialLR=',num2str(initialLR));
+    legend('Training error','Validation error');
+    plotname = strcat('Number of hidden layers=',num2str(length(hiddenLayersShape)),', Hidden layer size=',num2str(500));
     title(plotname);
     xlabel('Number of Epochs');
     ylabel('Classification Error');
-    legend('Training error','Validation error');
     saveas(f,filename{1})
     plot(x_axis,L_train(x_axis),x_axis,L_val(x_axis));
+    legend('Training loss','Validation loss');
     title(plotname);
     xlabel('Number of Epochs');
     ylabel('Loss');
-    legend('Training loss','Validation loss');
     saveas(f,filename{2})
     close all
+    
+    clsfError = clsfError_val(x_axis);
 end
-
